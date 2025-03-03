@@ -14,8 +14,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
   final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
   List<RunRecord> _runRecords = [];
-  Map<int, int> _completedDaysCount =
-      {}; 
+  Map<int, int> _completedDaysCount = {};
   bool _minTimeReached = false;
   bool _maxTimeReached = false;
 
@@ -35,10 +34,10 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
-        if (_stopwatch.elapsedMilliseconds >= 60000) {
+        if (_stopwatch.elapsedMilliseconds >= 6000000) {
           _stopStopwatch();
-          _maxTimeReached = true; 
-        } else if (_stopwatch.elapsedMilliseconds >= 30000) {
+          _maxTimeReached = true;
+        } else if (_stopwatch.elapsedMilliseconds >= 3000000) {
           _minTimeReached = true;
         }
       });
@@ -46,92 +45,98 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
   }
 
   void _stopStopwatch() async {
-  _stopwatch.stop();
-  _timer?.cancel();
+    _stopwatch.stop();
+    _timer?.cancel();
 
-  if (_stopwatch.elapsedMilliseconds >= 60000) {
-    _maxTimeReached = true;
-    await _saveRunRecord(_stopwatch.elapsedMilliseconds);
-    await _checkDailyCompletion();
-  } else if (_stopwatch.elapsedMilliseconds >= 30000) {
-    _minTimeReached = true;
-    await _saveRunRecord(_stopwatch.elapsedMilliseconds); 
+    if (_stopwatch.elapsedMilliseconds >= 60000) {
+      _maxTimeReached = true;
+      await _saveRunRecord(_stopwatch.elapsedMilliseconds);
+      await _checkDailyCompletion();
+    } else if (_stopwatch.elapsedMilliseconds >= 30000) {
+      _minTimeReached = true;
+      await _saveRunRecord(_stopwatch.elapsedMilliseconds);
+    }
+
+    setState(() {});
   }
 
-  setState(() {}); 
-}
   void _resetStopwatch() {
     _stopwatch.reset();
     _minTimeReached = false;
     _maxTimeReached = false;
     setState(() {});
   }
-Future<void> _loadRunRecords() async {
-  _runRecords = await RunFunction.loadRunRecords(); 
-  setState(() {});
-}
 
-Future<void> _loadCompletedDays() async {
-  Set<int> completedDays = await RunFunction.loadCompletedDays(); 
-  _completedDaysCount = { for (var day in completedDays) day : 1 }; 
-  setState(() {});
-}
- Future<void> _saveRunRecord(int milliseconds) async {
-  String date = DateTime.now().toString().split(" ")[0]; 
-  RunRecord record = RunRecord(milliseconds: milliseconds, date: date);
-  await RunFunction.saveRunRecord(record); 
-  _loadRunRecords(); 
-}
+  Future<void> _loadRunRecords() async {
+    _runRecords = await RunFunction.loadRunRecords();
+    setState(() {});
+  }
+
+  Future<void> _loadCompletedDays() async {
+    Set<int> completedDays = await RunFunction.loadCompletedDays();
+    _completedDaysCount = {for (var day in completedDays) day: 1};
+    setState(() {});
+  }
+
+  Future<void> _saveRunRecord(int milliseconds) async {
+    String date = DateTime.now().toString().split(" ")[0];
+    RunRecord record = RunRecord(milliseconds: milliseconds, date: date);
+    await RunFunction.saveRunRecord(record);
+    _loadRunRecords();
+  }
 
   String _formatTime(int milliseconds) {
     int seconds = (milliseconds ~/ 1000) % 60;
     int minutes = (milliseconds ~/ (1000 * 60)) % 60;
     int milliSeconds = milliseconds % 1000;
     String time = '$minutes:${seconds.toString().padLeft(2, '0')}';
-    return '$time.${milliSeconds.toString().padLeft(3, '0')}'; 
+    return '$time.${milliSeconds.toString().padLeft(3, '0')}';
   }
 
   Future<void> _saveCompletedDay(int day) async {
-  await RunFunction.saveCompletedDay(day);
-  _loadCompletedDays();
-}
-
-  Future<void> _checkDailyCompletion() async {
-  int nextDay = _completedDaysCount.isEmpty ? 1 : _completedDaysCount.length + 1;
-
-  if (nextDay <= 30) {
-    if (_completedDaysCount.containsKey(nextDay)) {
-      _completedDaysCount[nextDay] = _completedDaysCount[nextDay]! + 1;
-    } else {
-      _completedDaysCount[nextDay] = 1;
-    }
-
-    await _saveCompletedDay(nextDay); 
-    debugPrint('Marked Day $nextDay as completed, count: ${_completedDaysCount[nextDay]}');
-  } else {
-    debugPrint('Cannot complete beyond 30 days');
+    await RunFunction.saveCompletedDay(day);
+    _loadCompletedDays();
   }
 
-  setState(() {}); // Update UI
-}
-Future<void> _restartChallenge() async {
-  await RunFunction.clearCompletedDays(); // Clear completed days
-  await RunFunction.clearRunRecords(); // Clear run records
-  setState(() {
-    _completedDaysCount.clear(); // Reset completed days map
-    _runRecords.clear(); // Reset run records list
-  });
-}
+  Future<void> _checkDailyCompletion() async {
+    int nextDay =
+        _completedDaysCount.isEmpty ? 1 : _completedDaysCount.length + 1;
+
+    if (nextDay <= 30) {
+      if (_completedDaysCount.containsKey(nextDay)) {
+        _completedDaysCount[nextDay] = _completedDaysCount[nextDay]! + 1;
+      } else {
+        _completedDaysCount[nextDay] = 1;
+      }
+
+      await _saveCompletedDay(nextDay);
+      debugPrint(
+          'Marked Day $nextDay as completed, count: ${_completedDaysCount[nextDay]}');
+    } else {
+      debugPrint('Cannot complete beyond 30 days');
+    }
+
+    setState(() {}); // Update UI
+  }
+
+  Future<void> _restartChallenge() async {
+    await RunFunction.clearCompletedDays(); // Clear completed days
+    await RunFunction.clearRunRecords(); // Clear run records
+    setState(() {
+      _completedDaysCount.clear(); // Reset completed days map
+      _runRecords.clear(); // Reset run records list
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool isChallengeComplete =
-        _completedDaysCount.length == 30; 
+    bool isChallengeComplete = _completedDaysCount.length == 30;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        elevation: 0,
         title: const Text(
           'RUN A WHILE',
           style: TextStyle(
@@ -148,32 +153,31 @@ Future<void> _restartChallenge() async {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // Hero Image
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 width: double.infinity,
                 height: 180,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.deepPurple[400]!, Colors.deepPurple[700]!],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                color: Colors.grey[100], // Neutral background
                 child: Center(
                   child: Image.asset(
                     'images/runningnew.png',
                     width: double.infinity,
                     height: double.infinity,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 30),
 
+            // Time Constraints Card
             Card(
-              color: Colors.blueGrey,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(17),
                 child: Column(
@@ -183,7 +187,7 @@ Future<void> _restartChallenge() async {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 73, 72, 72),
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -196,10 +200,10 @@ Future<void> _restartChallenge() async {
                         ),
                         const SizedBox(width: 10),
                         const Text(
-                          'Minimum: 5 minutes',
+                          '5 minutes',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -217,7 +221,7 @@ Future<void> _restartChallenge() async {
                           'Maximum: 10 minutes',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ],
@@ -228,9 +232,9 @@ Future<void> _restartChallenge() async {
             ),
             const SizedBox(height: 20),
 
-          
+            // Stopwatch Display
             Container(
-              color: Colors.white, 
+              color: Colors.white,
               child: Card(
                 elevation: 0,
                 color: Colors.white,
@@ -265,6 +269,7 @@ Future<void> _restartChallenge() async {
 
             const SizedBox(height: 20),
 
+            // Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -273,7 +278,7 @@ Future<void> _restartChallenge() async {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 12),
-                    elevation: 0,
+                    elevation: 2,
                     backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -297,7 +302,7 @@ Future<void> _restartChallenge() async {
                   ),
                   child: const Text(
                     'Stop',
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -308,7 +313,7 @@ Future<void> _restartChallenge() async {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 12),
-                    elevation: 0,
+                    elevation: 2,
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -316,7 +321,6 @@ Future<void> _restartChallenge() async {
                   ),
                   child: const Text(
                     'Reset',
-                  
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
@@ -326,7 +330,10 @@ Future<void> _restartChallenge() async {
 
             // 30-Day Challenge Section
             Card(
-              color: Colors.white,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -337,34 +344,34 @@ Future<void> _restartChallenge() async {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
-                      height: 500,
-                      child:ListView.builder(
-  itemCount: 30,
-  itemBuilder: (context, index) {
-    int day = index + 1;
-    int count = _completedDaysCount[day] ?? 0;
-    return ListTile(
-      leading: Icon(
-        count > 0 ? Icons.check_circle : Icons.pending,
-        color: count > 0 ? Colors.green : Colors.grey,
-      ),
-      title: Text(
-        'Day $day - Completed: $count time(s)',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: count > 0 ? Colors.green : Colors.red,
-        ),
-      ),
-      subtitle: Text(count > 0 ? '10 min' : 'Not yet started'),
-    );
-  },
-)
-                    ),
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: 30,
+                          itemBuilder: (context, index) {
+                            int day = index + 1;
+                            int count = _completedDaysCount[day] ?? 0;
+                            return ListTile(
+                              leading: Icon(
+                                count > 0 ? Icons.check_circle : Icons.pending,
+                                color: count > 0 ? Colors.green : Colors.grey,
+                              ),
+                              title: Text(
+                                'Day $day - Completed: $count time(s)',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: count > 0 ? Colors.green : Colors.red,
+                                ),
+                              ),
+                              subtitle: Text(
+                                  count > 0 ? '10 min' : 'Not yet started'),
+                            );
+                          },
+                        )),
                   ],
                 ),
               ),
@@ -373,13 +380,12 @@ Future<void> _restartChallenge() async {
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                "After completing the 30 days, you will see a button here to restart from day 1. 🔄 Let's find that button!",
+                "After completing the 30 days, you will see a button here to restart from day 1.. 🔄 .Let's find that button!..🔄",
                 style: TextStyle(color: Colors.blueGrey),
               ),
             ),
 
-         
-            if (isChallengeComplete) 
+            if (isChallengeComplete)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: ElevatedButton(

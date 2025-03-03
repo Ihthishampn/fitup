@@ -23,6 +23,11 @@ class _SearchScreenState extends State<SearchScreen> {
   List<AdvanceWorkout> advancedWorkouts = [];
   List<Map<String, dynamic>> filteredWorkouts = [];
   String searchQuery = '';
+  Map<String, bool> filters = {
+    'Beginner': true,
+    'Intermediate': true,
+    'Advanced': true,
+  };
 
   final WorkoutFunctions _beginnerWorkoutFunctions = WorkoutFunctions();
   final IntermediateWorkoutFunction _intermediateWorkoutFunctions =
@@ -49,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       filteredWorkouts = [];
 
-      if (beginnerWorkouts.isNotEmpty) {
+      if (filters['Beginner']! && beginnerWorkouts.isNotEmpty) {
         filteredWorkouts.add({
           'type': 'Beginner Workouts',
           'workouts': searchQuery.isEmpty
@@ -62,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
         });
       }
 
-      if (intermediateWorkouts.isNotEmpty) {
+      if (filters['Intermediate']! && intermediateWorkouts.isNotEmpty) {
         filteredWorkouts.add({
           'type': 'Intermediate Workouts',
           'workouts': searchQuery.isEmpty
@@ -75,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
         });
       }
 
-      if (advancedWorkouts.isNotEmpty) {
+      if (filters['Advanced']! && advancedWorkouts.isNotEmpty) {
         filteredWorkouts.add({
           'type': 'Advanced Workouts',
           'workouts': searchQuery.isEmpty
@@ -125,7 +130,28 @@ class _SearchScreenState extends State<SearchScreen> {
                 },
               ),
               const SizedBox(height: 20),
-
+              // Horizontally scrollable filter chips
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: filters.keys.map((String key) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: FilterChip(
+                        label: Text(key),
+                        selected: filters[key]!,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            filters[key] = selected;
+                            _filterWorkouts();
+                          });
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 20),
               Expanded(
                 child: filteredWorkouts.isEmpty
                     ? Center(
@@ -203,8 +229,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    color: Colors.blueGrey[
-                                        50], 
+                                    color: Colors.blueGrey[50],
                                     child: ListTile(
                                       contentPadding: const EdgeInsets.all(12),
                                       leading: workout.image.isNotEmpty

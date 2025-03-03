@@ -345,11 +345,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildProfileCard(Person? person) {
     return Card(
-      color: Colors.blueGrey,
+      // color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      elevation: 8,
       shadowColor: Colors.black26,
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -377,15 +376,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _profileDetail('Name', person?.name ?? 'Unknown'),
-            _profileDetail('Age', person?.age?.toString() ?? 'Unknown'),
+            _profileDetail('Name', person?.name ?? 'Not Set'),
+            _profileDetail('Age', person?.age?.toString() ?? 'Not Set'),
             _profileDetail(
-                'Height', '${person?.height?.toString() ?? 'Unknown'} cm'),
+                'Height', '${person?.height?.toString() ?? 'Not Set'} cm'),
             _profileDetail(
-                'Weight', '${person?.weight?.toString() ?? 'Unknown'} kg'),
-            _profileDetail('Gender', person?.gender ?? 'Unknown'),
+                'Weight', '${person?.weight?.toString() ?? 'Not Set'} kg'),
+            _profileDetail('Gender', person?.gender ?? 'Not Set'),
             _profileDetail(
-                'Fitness Goal', person?.physicalCondition ?? 'Unknown'),
+                'Fitness Goal', person?.physicalCondition ?? 'Not Set'),
           ],
         ),
       ),
@@ -402,7 +401,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 223, 221, 221))),
+                  color: Colors.black)),
           Text(value,
               style:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
@@ -413,17 +412,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildRemindersCard() {
     return Card(
+      color: const Color.fromARGB(255, 121, 177, 209),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20), // Smoother corners
+        borderRadius: BorderRadius.circular(20),
       ),
-      elevation: 8, // Increased elevation for better shadow effect
-      shadowColor: Colors.black26, // Softer shadow color
-      color: const Color.fromARGB(
-          255, 115, 157, 230), // Changed to a vibrant color
+      shadowColor: Colors.black26,
       child: Padding(
-        padding: const EdgeInsets.all(24.0), // Increased padding for layout
+        padding: const EdgeInsets.all(24.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Prevents expansion
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -431,64 +428,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const Text(
                   'REMINDERS',
                   style: TextStyle(
-                    fontSize: 17, // Increased font size
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.add, color: Colors.white),
+                  icon: const Icon(Icons.add, color: Colors.black),
                   onPressed: _addReminder,
-                  tooltip: 'Add Reminder', // Tooltip for better usability
+                  tooltip: 'Add Reminder',
                 ),
               ],
             ),
-            const SizedBox(height: 15), // Increased space
+            const SizedBox(height: 15),
             _reminders.isEmpty
                 ? const Text(
                     'No reminders yet',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70), // Slightly lighter color
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   )
                 : ListView.builder(
                     shrinkWrap: true,
                     itemCount: _reminders.length,
-                    physics:
-                        const NeverScrollableScrollPhysics(), // Disable scrolling
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8.0), // Spacing between reminders
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
                         decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 228, 227,
-                              227), // Background color for list item
+                          color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
-                              blurRadius: 4,
-                              offset: Offset(2, 2), // Shadow offset
+                              offset: Offset(1, 1),
                             ),
                           ],
                         ),
                         child: ListTile(
                           title: Text(
                             _reminders[index].content,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold), // Bold titles
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
                             _reminders[index].time,
-                            style: TextStyle(
-                                color: Colors.grey[600]), // Grey subtitle
+                            style: TextStyle(color: Colors.grey[600]),
                           ),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete,
                                 color: Colors.redAccent),
                             onPressed: () => _deleteReminder(index),
-                            tooltip:
-                                'Delete Reminder', // Tooltip for better usability
+                            tooltip: 'Delete Reminder',
                           ),
                         ),
                       );

@@ -1078,8 +1078,7 @@ class _FitnessActivitySelectorScreenState
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 backgroundColor: Colors.blueGrey,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(10), 
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               child: const Text(
@@ -1111,7 +1110,7 @@ class _FitnessActivitySelectorScreenState
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: Colors.white, 
+                          color: Colors.white,
                         ),
                       ),
                       subtitle: Text(
