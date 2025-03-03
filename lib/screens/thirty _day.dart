@@ -238,7 +238,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
               child: Card(
                 elevation: 0,
                 color: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: RichText(
