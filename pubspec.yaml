@@ -1,0 +1,76 @@
+name: ui
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4  # Ensure compatibility with Flutter SDK 3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8  # For Cupertino-style icons
+  shared_preferences: ^2.2.2  # For local key-value storage
+  image_picker: ^1.0.7  # For selecting images and videos
+  hive: ^2.2.3  # Local NoSQL database
+  hive_flutter: ^1.1.0  # Hive adapter for Flutter
+  path_provider: ^2.1.2  # To get local storage directory
+  intl: ^0.20.2
+  flutter_local_notifications: ^18.0.1
+  firebase_messaging: ^15.2.4
+  numberpicker: ^2.1.2
+  permission_handler: ^11.4.0
+  timezone: ^0.10.0
+  flutter_timezone: ^4.1.0
+  flutter_launcher_icons: ^0.14.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0  # For linting and code quality
+  hive_generator: ^2.0.1  # Generates TypeAdapters for Hive
+  build_runner: ^2.4.6  # Required for code generation
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - images/splashimage.png
+    - images/loginimage.png
+    - images/logogym.png
+    - images/slider1.jpg
+    - images/Squat-without-knee-and-lower-back-pain.jpg
+    - images/strong-athletic-man-sprinter-running-260nw-1504524026.jpg
+    - images/stand.jpeg
+    - images/weight.jpeg
+    - images/lift.jpeg
+    - images/barbell-squat-resized-FIXED-2.webp
+    - images/squaa.jpeg
+    - images/1offfffffff.png
+    - images/2offfffffffff.png
+    - images/3offffffff.png
+    - images/diet111.png
+    - images/diet222.png
+    - images/diet3333.png
+    - images/begi111.png
+    - images/begi222.png
+    - images/begi333.png
+    - images/begi44.png
+    - images/absbeginner.png
+    - images/ruuuuuuuuuu.png
+    - images/runningnew.png
+    - images/entryphoto.png
+    - images/deww.jpg
+    - images/lets.png
+    - images/fit1.png
+    - images/sherii.png
+    - images/okeyy.png
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/logogym.png"  # Replace with your actual logo path
+  adaptive_icon_foreground: "images/logogym.png"
+  adaptive_icon_background: "#ffffff"  # Set a background color
