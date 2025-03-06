@@ -1,4 +1,4 @@
-package com.example.myapp
+package com.yourunique.fitup
 
 import io.flutter.embedding.android.FlutterActivity
 

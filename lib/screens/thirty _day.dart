@@ -18,6 +18,9 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
   bool _minTimeReached = false;
   bool _maxTimeReached = false;
 
+  int _currentDayIndex = 0; // Tracks the current chunk of 4 days
+  static const int _daysToShow = 4; // Number of days to show at a time
+
   @override
   void initState() {
     super.initState();
@@ -26,18 +29,60 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
 
   Future<void> _initializeHive() async {
     await RunFunction.initHive();
-    _loadRunRecords();
-    _loadCompletedDays();
+    await _loadRunRecords();
+    await _loadCompletedDays();
+    _setCurrentDayIndexBasedOnLastCompletedDay(); // Set index based on last completed day
+    _checkAndShowReminder(); // Check if the current day is incomplete
+  }
+
+  void _checkAndShowReminder() {
+    int currentDay = _getCurrentDay();
+    if (!_completedDaysCount.containsKey(currentDay)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showReminderPopup(currentDay);
+      });
+    }
+  }
+
+  void _showReminderPopup(int day) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Reminder'),
+        content: Text(
+            'You haven\'t completed Day $day yet. Don\'t forget to complete it today!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  int _getCurrentDay() {
+    return _completedDaysCount.isEmpty ? 1 : _completedDaysCount.length + 1;
+  }
+
+  void _setCurrentDayIndexBasedOnLastCompletedDay() {
+    if (_completedDaysCount.isNotEmpty) {
+      int lastCompletedDay = _completedDaysCount.keys.last;
+      _currentDayIndex = ((lastCompletedDay - 1) ~/ _daysToShow) * _daysToShow;
+      setState(() {});
+    }
   }
 
   void _startStopwatch() {
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
-        if (_stopwatch.elapsedMilliseconds >= 6000000) {
+        if (_stopwatch.elapsedMilliseconds >= 600000) {
+          // 10 minutes
           _stopStopwatch();
           _maxTimeReached = true;
-        } else if (_stopwatch.elapsedMilliseconds >= 3000000) {
+        } else if (_stopwatch.elapsedMilliseconds >= 300000) {
+          // 5 minutes
           _minTimeReached = true;
         }
       });
@@ -48,16 +93,18 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
     _stopwatch.stop();
     _timer?.cancel();
 
-    if (_stopwatch.elapsedMilliseconds >= 60000) {
+    if (_stopwatch.elapsedMilliseconds >= 600000) {
+      // 10 minutes
       _maxTimeReached = true;
       await _saveRunRecord(_stopwatch.elapsedMilliseconds);
       await _checkDailyCompletion();
-    } else if (_stopwatch.elapsedMilliseconds >= 30000) {
+    } else if (_stopwatch.elapsedMilliseconds >= 300000) {
+      // 5 minutes
       _minTimeReached = true;
       await _saveRunRecord(_stopwatch.elapsedMilliseconds);
     }
 
-    setState(() {});
+    setState(() {}); // Ensure UI updates
   }
 
   void _resetStopwatch() {
@@ -125,7 +172,24 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
     setState(() {
       _completedDaysCount.clear(); // Reset completed days map
       _runRecords.clear(); // Reset run records list
+      _currentDayIndex = 0; // Reset to the first chunk
     });
+  }
+
+  void _nextChunk() {
+    if (_currentDayIndex + _daysToShow < 30) {
+      setState(() {
+        _currentDayIndex += _daysToShow; // Move to next set of days
+      });
+    }
+  }
+
+  void _previousChunk() {
+    if (_currentDayIndex - _daysToShow >= 0) {
+      setState(() {
+        _currentDayIndex -= _daysToShow; // Move to previous set of days
+      });
+    }
   }
 
   @override
@@ -133,7 +197,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
     bool isChallengeComplete = _completedDaysCount.length == 30;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100], // Light background
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -159,7 +223,13 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
               child: Container(
                 width: double.infinity,
                 height: 180,
-                color: Colors.grey[100], // Neutral background
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue[400]!, Colors.purple[400]!],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
                 child: Center(
                   child: Image.asset(
                     'images/runningnew.png',
@@ -174,7 +244,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
 
             // Time Constraints Card
             Card(
-              elevation: 2,
+              elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -234,34 +304,36 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
 
             // Stopwatch Display
             Container(
-              color: Colors.white,
-              child: Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: RichText(
-                    text: TextSpan(
-                      text: _formatTime(_stopwatch.elapsedMilliseconds)
-                          .substring(0, 5),
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: _maxTimeReached ? Colors.red : Colors.black,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: _formatTime(_stopwatch.elapsedMilliseconds)
-                              .substring(5),
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: _maxTimeReached ? Colors.red : Colors.black,
-                          ),
-                        ),
-                      ],
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue[400]!, Colors.purple[400]!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: RichText(
+                  text: TextSpan(
+                    text: _formatTime(_stopwatch.elapsedMilliseconds)
+                        .substring(0, 5),
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
+                    children: [
+                      TextSpan(
+                        text: _formatTime(_stopwatch.elapsedMilliseconds)
+                            .substring(5),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -330,7 +402,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
 
             // 30-Day Challenge Section
             Card(
-              elevation: 2,
+              elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -349,29 +421,47 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
-                        height: 500,
-                        child: ListView.builder(
-                          itemCount: 30,
-                          itemBuilder: (context, index) {
-                            int day = index + 1;
-                            int count = _completedDaysCount[day] ?? 0;
-                            return ListTile(
-                              leading: Icon(
-                                count > 0 ? Icons.check_circle : Icons.pending,
-                                color: count > 0 ? Colors.green : Colors.grey,
+                      height: 350,
+                      child: ListView.builder(
+                        itemCount: _daysToShow,
+                        itemBuilder: (context, index) {
+                          int day = _currentDayIndex + index + 1;
+                          if (day > 30) return Container(); // Avoid overflow
+                          int count = _completedDaysCount[day] ?? 0;
+
+                          return ListTile(
+                            leading: Icon(
+                              count > 0 ? Icons.check_circle : Icons.pending,
+                              color: count > 0 ? Colors.green : Colors.grey,
+                            ),
+                            title: Text(
+                              'Day $day - Completed: $count time(s)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: count > 0 ? Colors.green : Colors.red,
                               ),
-                              title: Text(
-                                'Day $day - Completed: $count time(s)',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: count > 0 ? Colors.green : Colors.red,
-                                ),
-                              ),
-                              subtitle: Text(
-                                  count > 0 ? '10 min' : 'Not yet started'),
-                            );
-                          },
-                        )),
+                            ),
+                            subtitle:
+                                Text(count > 0 ? '10 min' : 'Not yet started'),
+                          );
+                        },
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (_currentDayIndex > 0)
+                          TextButton(
+                            onPressed: _previousChunk,
+                            child: const Text('Previous Days'),
+                          ),
+                        if (_currentDayIndex + _daysToShow < 30)
+                          TextButton(
+                            onPressed: _nextChunk,
+                            child: const Text('Next Days'),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ),

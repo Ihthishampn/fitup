@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:ui/core/fitness_funtion.dart';
 import 'package:ui/modules/fitness_plan_model.dart';
@@ -250,7 +249,8 @@ class _FitnessActivitySelectorScreenState
                             onPressed: () => _editActivity(plan, index),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete,
+                                color: Color.fromARGB(255, 209, 97, 97)),
                             onPressed: () => _deleteActivity(index),
                           ),
                         ],

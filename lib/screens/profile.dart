@@ -63,22 +63,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                InkWell(
-                  onTap: () async {
-                    File? newImage = await _pickImage();
-                    if (newImage != null) {
-                      personNotifier.value?.imagePath = newImage.path;
-                      setState(() {});
-                    }
-                  },
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: (personNotifier.value?.imagePath != null &&
-                            personNotifier.value!.imagePath!.isNotEmpty)
-                        ? FileImage(File(personNotifier.value!.imagePath!))
-                        : const AssetImage('images/logogym.png')
-                            as ImageProvider,
-                  ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        File? newImage = await _pickImage();
+                        if (newImage != null) {
+                          personNotifier.value?.imagePath = newImage.path;
+                          setState(() {});
+                        }
+                      },
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: (personNotifier.value?.imagePath !=
+                                    null &&
+                                personNotifier.value!.imagePath!.isNotEmpty)
+                            ? FileImage(File(personNotifier.value!.imagePath!))
+                            : const AssetImage('images/logogym.png')
+                                as ImageProvider,
+                      ),
+                    ),
+                    const Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Colors.blue,
+                        child: Icon(Icons.image, color: Colors.white, size: 18),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 15),
                 TextField(
@@ -122,6 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   setState(() {
                     personNotifier.value = updatedPerson;
                   });
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 },
                 child: const Text('Save'),
@@ -189,6 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         initialTime: TimeOfDay.now(),
                       );
                       if (selectedTime != null) {
+                        // ignore: use_build_context_synchronously
                         timeController.text = selectedTime.format(context);
                         timeError.value = false;
                       }
@@ -264,12 +281,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ScaffoldMessenger.of(parentContext).showSnackBar(
                       const SnackBar(
                         content: Text('Reminder added successfully!'),
-                        duration: Duration(seconds: 3), // Display for 2 seconds
-                        backgroundColor: Colors.blueGrey, // Green for success
+                        duration: Duration(seconds: 3),
+                        backgroundColor: Colors.blueGrey,
                       ),
                     );
                   });
 
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 }
               },
@@ -320,7 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit, color: Colors.black),
+            icon: const Icon(Icons.edit_document, color: Colors.black),
             onPressed: _editProfile,
           ),
         ],
@@ -412,7 +430,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildRemindersCard() {
     return Card(
-      color: const Color.fromARGB(255, 121, 177, 209),
+      color: const Color.fromARGB(255, 112, 114, 116),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
