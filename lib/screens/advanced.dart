@@ -27,7 +27,6 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
   final AdvanceWorkoutFunction _workoutFunctions = AdvanceWorkoutFunction();
   List<AdvanceWorkout> workouts = [];
 
-  
   String? _nameError;
   String? _goalError;
   String? _imageError;
@@ -55,8 +54,8 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
       if (file != null) {
         setDialogState(() {
           _selectedFile = file;
-          _imageError = null; 
-          _imageFieldTouched = true; 
+          _imageError = null;
+          _imageFieldTouched = true;
         });
       }
     } catch (e) {
@@ -128,11 +127,11 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                         padding: const EdgeInsets.only(top: 8.0, left: 15),
                         child: Text(
                           _imageError!,
-                          style: const TextStyle(color: Colors.red, fontSize: 12),
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 12),
                         ),
                       ),
                     const SizedBox(height: 15),
-
                     _buildTextField(_nameController, "Workout Name", _nameError,
                         onChanged: () {
                       setState(() {
@@ -140,8 +139,6 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                       });
                     }),
                     const SizedBox(height: 10),
-
-        
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -187,7 +184,6 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                       ],
                     ),
                     const SizedBox(height: 10),
-
                     _buildTextField(_goalController, "Goal", _goalError,
                         onChanged: () {
                       setState(() {
@@ -195,7 +191,6 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                       });
                     }),
                     const SizedBox(height: 10),
-
                     const Text("Count",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
@@ -270,7 +265,7 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                       });
                     }
 
-                    if (hasErrors) return; 
+                    if (hasErrors) return;
 
                     final workout = AdvanceWorkout(
                       name: _nameController.text,
@@ -341,8 +336,7 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                   const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             ),
           ),
-          if (hasError &&
-              isTouched) 
+          if (hasError && isTouched)
             Padding(
               padding: const EdgeInsets.only(left: 15, top: 4),
               child: Text(
@@ -357,8 +351,8 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
 
   void _clearInputs() {
     _nameController.clear();
-    _goalController.clear(); 
-    _selectedHours = 0; 
+    _goalController.clear();
+    _selectedHours = 0;
     _selectedMinutes = 0;
     _selectedFile = null;
     editingIndex = null;
@@ -367,9 +361,9 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
     _goalFieldTouched = false;
     _imageFieldTouched = false;
 
-    _nameError = null; 
-    _goalError = null; 
-    _imageError = null; 
+    _nameError = null;
+    _goalError = null;
+    _imageError = null;
   }
 
   Future<void> _confirmDeleteWorkout(int index) async {
@@ -413,7 +407,7 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon:
@@ -423,9 +417,9 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
         title: const Text('ADVANCED WORKOUT',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+                color: Color.fromARGB(255, 241, 242, 243),
                 fontSize: 19)),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
       ),
       body: workouts.isEmpty
           ? const Center(child: Text("No Workouts Added"))
@@ -487,7 +481,8 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                                       workout.completed
                                           ? "Completed"
                                           : "Mark as Completed",
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: workout.completed
@@ -538,9 +533,11 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddWorkoutDialog(),
-        child: const Icon(Icons.add),
+        label: const Text('Add '),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
       ),
     );
   }

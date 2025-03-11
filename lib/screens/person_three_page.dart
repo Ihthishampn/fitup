@@ -16,7 +16,6 @@ class _PersonDetailsPage3State extends State<PersonDetailsPage3> {
   int _currentPage = 0;
 
   void navigateToSplash2() async {
-    // Set the shared preference flag here
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasSeenIntro', true);
 

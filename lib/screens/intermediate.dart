@@ -58,7 +58,7 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
         setDialogState(() {
           _selectedFile = file;
           _imageError = null;
-          _imageFieldTouched = true; 
+          _imageFieldTouched = true;
         });
       }
     } catch (e) {
@@ -130,7 +130,8 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                         padding: const EdgeInsets.only(top: 8.0, left: 15),
                         child: Text(
                           _imageError!,
-                          style: const TextStyle(color: Colors.red, fontSize: 12),
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 12),
                         ),
                       ),
                     const SizedBox(height: 15),
@@ -140,12 +141,11 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                       _nameError,
                       onChanged: () {
                         setState(() {
-                          _nameFieldTouched = true; 
+                          _nameFieldTouched = true;
                         });
                       },
                     ),
                     const SizedBox(height: 10),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -194,11 +194,10 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                     _buildTextField(_goalController, "Goal", _goalError,
                         onChanged: () {
                       setState(() {
-                        _goalFieldTouched = true; 
+                        _goalFieldTouched = true;
                       });
                     }),
                     const SizedBox(height: 10),
-
                     const Text("Count",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
@@ -282,7 +281,7 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                       });
                     }
 
-                    if (hasErrors) return; 
+                    if (hasErrors) return;
 
                     final workout = IntermediateWorkout(
                       name: _nameController.text,
@@ -359,8 +358,8 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
   void _clearInputs() {
     _nameController.clear();
     _goalController.clear();
-    _selectedCount = 1; 
-    _selectedHours = 0; 
+    _selectedCount = 1;
+    _selectedHours = 0;
     _selectedMinutes = 0;
     _selectedFile = null;
     editingIndex = null;
@@ -379,13 +378,11 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
           content: const Text("Are you sure you want to delete this workout?"),
           actions: <Widget>[
             TextButton(
-              onPressed: () =>
-                  Navigator.of(context).pop(false),
+              onPressed: () => Navigator.of(context).pop(false),
               child: const Text("No", style: TextStyle(color: Colors.red)),
             ),
             TextButton(
-              onPressed: () =>
-                  Navigator.of(context).pop(true), 
+              onPressed: () => Navigator.of(context).pop(true),
               child: const Text("Yes"),
             ),
           ],
@@ -400,20 +397,20 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
 
   Future<void> _deleteWorkout(int index) async {
     _workoutFunctions.deleteWorkout(index);
-    _loadWorkouts(); // Refresh the list
+    _loadWorkouts();
   }
 
   Future<void> _toggleWorkoutCompletion(int index) async {
     final workout = workouts[index];
     workout.completed = !workout.completed;
     _workoutFunctions.updateWorkout(index, workout);
-    _loadWorkouts(); 
+    _loadWorkouts();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon:
@@ -423,9 +420,9 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
         title: const Text('INTERMEDIATE WORKOUT',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+                color: Color.fromARGB(255, 232, 234, 235),
                 fontSize: 19)),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
       ),
       body: workouts.isEmpty
           ? const Center(child: Text("No Workouts Added"))
@@ -487,7 +484,8 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                                       workout.completed
                                           ? "Completed"
                                           : "Mark as Completed",
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: workout.completed
@@ -538,9 +536,11 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddWorkoutDialog(),
-        child: const Icon(Icons.add),
+        label: const Text('Add '),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
       ),
     );
   }

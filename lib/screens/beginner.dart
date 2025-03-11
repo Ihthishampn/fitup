@@ -143,7 +143,8 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                         padding: const EdgeInsets.only(top: 8.0, left: 15),
                         child: Text(
                           _imageError!,
-                          style: const TextStyle(color: Colors.red, fontSize: 12),
+                          style:
+                              const TextStyle(color: Colors.red, fontSize: 12),
                         ),
                       ),
                     const SizedBox(height: 15),
@@ -235,7 +236,6 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    // Reset error messages
                     setDialogState(() {
                       _nameError = null;
                       _goalError = null;
@@ -265,7 +265,6 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                       });
                     }
 
-                    // Check that either hours or minutes is greater than zero
                     if (_selectedHours == 0 && _selectedMinutes == 0) {
                       hasErrors = true;
                       setDialogState(() {
@@ -276,9 +275,8 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                       });
                     }
 
-                    if (hasErrors) return; // Exit if any validation fails
+                    if (hasErrors) return;
 
-                    // Create the workout object
                     final workout = WorkoutModel(
                       name: _nameController.text,
                       duration:
@@ -291,7 +289,6 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                           : false,
                     );
 
-                    // Perform add/update operation
                     if (editingIndex != null) {
                       await _workoutFunctions.updateWorkout(
                           editingIndex!, workout);
@@ -348,9 +345,7 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                   const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             ),
           ),
-          // Display error message if applicable
-          if (hasError &&
-              isTouched) // Show error message only if field has been touched
+          if (hasError && isTouched)
             Padding(
               padding: const EdgeInsets.only(left: 15, top: 4),
               child: Text(
@@ -366,20 +361,19 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
   void _clearInputs() {
     _nameController.clear();
     _goalController.clear();
-    _selectedHours = 0; // Reset Hours
-    _selectedMinutes = 0; // Reset Minutes
-    _selectedCount = 1; // Reset Count to 1
+    _selectedHours = 0;
+    _selectedMinutes = 0;
+    _selectedCount = 1;
     _selectedFile = null;
     editingIndex = null;
 
-    // Reset field interaction flags and errors
     _nameFieldTouched = false;
     _goalFieldTouched = false;
     _imageFieldTouched = false;
 
-    _nameError = null; // Reset error
-    _goalError = null; // Reset error
-    _imageError = null; // Reset image error
+    _nameError = null;
+    _goalError = null;
+    _imageError = null;
   }
 
   Future<void> _confirmDeleteWorkout(int index) async {
@@ -423,7 +417,7 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon:
@@ -433,9 +427,9 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
         title: const Text('BEGINNER WORKOUT',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+                color: Color.fromARGB(255, 240, 241, 241),
                 fontSize: 19)),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
       ),
       body: workouts.isEmpty
           ? const Center(child: Text("No Workouts Added"))
@@ -498,7 +492,8 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                                       workout.completed
                                           ? "Completed"
                                           : "Mark as Completed",
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: workout.completed
@@ -549,9 +544,11 @@ class _BeginnerWorkoutPageState extends State<BeginnerWorkoutPage> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddWorkoutDialog(),
-        child: const Icon(Icons.add),
+        label: const Text('Add '),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
       ),
     );
   }

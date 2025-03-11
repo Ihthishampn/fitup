@@ -35,7 +35,7 @@ class _Splash2State extends State<Splash2> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(), // Dark mode for a sleek look
+      theme: ThemeData.dark(), 
       home: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(

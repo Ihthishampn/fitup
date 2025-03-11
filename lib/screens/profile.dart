@@ -316,7 +316,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 setState(() {
                   _reminders.removeAt(index);
                 });
-                ReminderFunction.deleteReminder(index); // Remove from Hive
+                ReminderFunction.deleteReminder(index);
                 Navigator.pop(context);
               },
               child: const Text('Delete'),
@@ -330,81 +330,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text('MY PROFILE',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_document, color: Colors.black),
-            onPressed: _editProfile,
-          ),
-        ],
+      backgroundColor: Colors.blueAccent,
+      centerTitle: true,
+      title: const Text(
+        'MY PROFILE',
+        style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        color: Colors.white,
+        ),
+      ),
+      actions: [
+        IconButton(
+        icon: const Icon(Icons.edit, color: Colors.white),
+        onPressed: _editProfile,
+        ),
+      ],
       ),
       body: ValueListenableBuilder<Person?>(
-        valueListenable: personNotifier,
-        builder: (context, person, child) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                _buildProfileCard(person),
-                const SizedBox(height: 20),
-                _buildRemindersCard(),
-              ],
-            ),
-          );
-        },
+      valueListenable: personNotifier,
+      builder: (context, person, child) {
+        return SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+          _buildProfileCard(person),
+          const SizedBox(height: 20),
+          _buildRemindersCard(),
+          ],
+        ),
+        );
+      },
+      ),
+      floatingActionButton: FloatingActionButton(
+      onPressed: _editProfile,
+      backgroundColor: Colors.blueAccent,
+      child: const Icon(Icons.edit, color: Colors.white),
       ),
     );
   }
 
   Widget _buildProfileCard(Person? person) {
     return Card(
-      // color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(20),
       ),
       shadowColor: Colors.black26,
+      elevation: 5,
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.grey[200],
-              child: ClipOval(
-                child:
-                    (person?.imagePath != null && person!.imagePath!.isNotEmpty)
-                        ? Image.file(
-                            File(person.imagePath!),
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset(
-                            'images/logogym.png',
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            _profileDetail('Name', person?.name ?? 'Not Set'),
-            _profileDetail('Age', person?.age?.toString() ?? 'Not Set'),
-            _profileDetail(
-                'Height', '${person?.height?.toString() ?? 'Not Set'} cm'),
-            _profileDetail(
-                'Weight', '${person?.weight?.toString() ?? 'Not Set'} kg'),
-            _profileDetail('Gender', person?.gender ?? 'Not Set'),
-            _profileDetail(
-                'Fitness Goal', person?.physicalCondition ?? 'Not Set'),
-          ],
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+        CircleAvatar(
+          radius: 60,
+          backgroundColor: Colors.grey[200],
+          child: ClipOval(
+          child:
+            (person?.imagePath != null && person!.imagePath!.isNotEmpty)
+              ? Image.file(
+                File(person.imagePath!),
+                width: 120,
+                height: 120,
+                fit: BoxFit.cover,
+                )
+              : Image.asset(
+                'images/logogym.png',
+                width: 120,
+                height: 120,
+                fit: BoxFit.cover,
+                ),
+          ),
         ),
+        const SizedBox(height: 20),
+        _profileDetail('Name', person?.name ?? 'Not Set'),
+        _profileDetail('Age', person?.age?.toString() ?? 'Not Set'),
+        _profileDetail(
+          'Height', '${person?.height?.toString() ?? 'Not Set'} cm'),
+        _profileDetail(
+          'Weight', '${person?.weight?.toString() ?? 'Not Set'} kg'),
+        _profileDetail('Gender', person?.gender ?? 'Not Set'),
+        _profileDetail(
+          'Fitness Goal', person?.physicalCondition ?? 'Not Set'),
+        ],
+      ),
       ),
     );
   }
@@ -430,78 +441,83 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildRemindersCard() {
     return Card(
-      color: const Color.fromARGB(255, 112, 114, 116),
+      color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(20),
       ),
       shadowColor: Colors.black26,
+      elevation: 5,
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'REMINDERS',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add, color: Colors.black),
-                  onPressed: _addReminder,
-                  tooltip: 'Add Reminder',
-                ),
-              ],
+          const Text(
+            'Reminders',
+            style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
             ),
-            const SizedBox(height: 15),
-            _reminders.isEmpty
-                ? const Text(
-                    'No reminders yet',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _reminders.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              offset: Offset(1, 1),
-                            ),
-                          ],
-                        ),
-                        child: ListTile(
-                          title: Text(
-                            _reminders[index].content,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            _reminders[index].time,
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete,
-                                color: Colors.redAccent),
-                            onPressed: () => _deleteReminder(index),
-                            tooltip: 'Delete Reminder',
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add, color: Colors.blue),
+            onPressed: _addReminder,
+            tooltip: 'Add Reminder',
+          ),
           ],
         ),
+        const Divider(color: Colors.grey),
+        const SizedBox(height: 10),
+        _reminders.isEmpty
+          ? const Text(
+            'No reminders yet',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+            )
+          : ListView.builder(
+            shrinkWrap: true,
+            itemCount: _reminders.length,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  offset: Offset(1, 1),
+                  blurRadius: 5,
+                ),
+                ],
+              ),
+              child: ListTile(
+                title: Text(
+                _reminders[index].content,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                ),
+                subtitle: Text(
+                _reminders[index].time,
+                style: TextStyle(color: Colors.grey[600]),
+                ),
+                trailing: IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: () => _deleteReminder(index),
+                tooltip: 'Delete Reminder',
+                ),
+              ),
+              );
+            },
+            ),
+        ],
+      ),
       ),
     );
   }

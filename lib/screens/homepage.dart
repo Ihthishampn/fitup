@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white, // White background
+                color: Colors.white,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -83,11 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: BottomNavigationBar(
                 currentIndex: _selectedIndex,
                 onTap: _onItemTapped,
-                selectedItemColor: Colors.blueGrey, // Selected icon color
+                selectedItemColor: Colors.blueGrey,
                 unselectedItemColor: const Color.fromARGB(
-                    255, 109, 96, 96), // Unselected icon color
+                    255, 109, 96, 96), 
                 type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.white, // White background
+                backgroundColor: Colors.white, 
                 elevation: 0,
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: _selectedIndex == 0
                             ? Colors.purple
-                                .withOpacity(0.1) // Light purple highlight
+                                .withOpacity(0.1) 
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: _selectedIndex == 1
                             ? Colors.purple
-                                .withOpacity(0.1) // Light purple highlight
+                                .withOpacity(0.1) 
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: _selectedIndex == 2
                             ? Colors.purple
-                                .withOpacity(0.1) // Light purple highlight
+                                .withOpacity(0.1) 
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: _selectedIndex == 3
                             ? Colors.blueGrey
-                                .withOpacity(0.1) // Light purple highlight
+                                .withOpacity(0.1)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -180,156 +180,122 @@ class HomeWorkoutScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          centerTitle: true,
-          actions: const [
-            // Padding(
-            //   padding: EdgeInsets.only(right: 20.0),
-            //   child: CircleAvatar(
-            //     radius: 15,
-            //     backgroundImage: AssetImage('images/logogym.png'),
-            //   ),
-            // ),
-          ],
-          title: const Text(
-            'HOME WORKOUT',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-              fontSize: 20,
+      centerTitle: true,
+      title: const Text(
+        'HOME WORKOUT',
+        style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        fontSize: 20,
+        ),
+      ),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      iconTheme: const IconThemeData(color: Colors.black),
+      ),
+      body: SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Image.asset(
+          'images/slider1.jpg',
+          width: double.infinity,
+          height: 180,
+          fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(height: 18),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+          const Expanded(
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+              'Start your body-toning journey to target running',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              ),
+              SizedBox(height: 5),
+              Text(
+              'muscle groups and build your stamina in 4 weeks.',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                color: Color.fromARGB(255, 37, 41, 95),
+              ),
+              ),
+            ],
             ),
           ),
-          backgroundColor: Colors.white),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                'images/slider1.jpg',
-                width: double.infinity,
-                height: 180,
-                fit: BoxFit.cover,
+          ElevatedButton(
+            onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (context) => const WorkoutSchedulePage(),
               ),
+            );
+            },
+            style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blueGrey,
+            fixedSize: const Size(100, 45),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            const SizedBox(height: 18),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Start your body-toning journey to target running',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 5), // Add some space between the lines
-                      Text(
-                        'muscle groups and build your stamina in 4 weeks.',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: Color.fromARGB(255, 37, 41, 95),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WorkoutSchedulePage(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueGrey,
-                    fixedSize: const Size(100, 45),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Start',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-              ],
             ),
-
-            const SizedBox(height: 7),
-            // Center(
-            //   child: ElevatedButton(
-            //     onPressed: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => WorkoutSchedulePage(),
-            //         ),
-            //       );
-            //     },
-            //     style: ElevatedButton.styleFrom(
-            //       backgroundColor: const Color.fromARGB(255, 92, 89, 89),
-            //       fixedSize: const Size(double.infinity, 45),
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(12),
-            //       ),
-            //       elevation: 5,
-            //     ),
-            //     child: const Text(
-            //       'Start',
-            //       style: TextStyle(fontSize: 16, color: Colors.white),
-            //     ),
-            //   ),
-            // ),
-            const SizedBox(height: 38),
-
-            const SizedBox(height: 7),
-            WorkoutLevelCard(
-              imagePath: 'images/1offfffffff.png',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const BeginnerWorkoutPage(),
-                  ),
-                );
-              },
+            child: const Text(
+            'Start',
+            style: TextStyle(fontSize: 16, color: Colors.white),
             ),
-            const SizedBox(height: 20),
-            WorkoutLevelCard(
-              imagePath: 'images/2offfffffffff.png',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const IntermediateWorkoutPage(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            WorkoutLevelCard(
-              imagePath: 'images/3offffffff.png',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AdvancedWorkoutPage(),
-                  ),
-                );
-              },
-            ),
+          ),
           ],
         ),
+        const SizedBox(height: 38),
+        WorkoutLevelCard(
+          imagePath: 'images/1offfffffff.png',
+          onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => const BeginnerWorkoutPage(),
+            ),
+          );
+          },
+        ),
+        const SizedBox(height: 20),
+        WorkoutLevelCard(
+          imagePath: 'images/2offfffffffff.png',
+          onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => const IntermediateWorkoutPage(),
+            ),
+          );
+          },
+        ),
+        const SizedBox(height: 20),
+        WorkoutLevelCard(
+          imagePath: 'images/3offffffff.png',
+          onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => const AdvancedWorkoutPage(),
+            ),
+          );
+          },
+        ),
+        ],
+      ),
       ),
     );
   }

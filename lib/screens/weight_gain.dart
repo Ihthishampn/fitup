@@ -5,8 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ui/core/weight_funtion.dart';
 import 'package:ui/modules/weight_model.dart';
 
-
-
 class WeightLossScreen extends StatefulWidget {
   const WeightLossScreen({super.key});
 
@@ -18,7 +16,6 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
   final ImagePicker _imagePicker = ImagePicker();
   List<WeightModel> _foodEntries = [];
 
-  // Error messages
   String? _nameError;
   String? _proteinError;
   String? _caloriesError;
@@ -65,7 +62,7 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
               if (pickedFile != null) {
                 setDialogState(() {
                   selectedImage = File(pickedFile.path);
-                  _imageError = null; // Clear previous image error
+                  _imageError = null;
                 });
               }
             }
@@ -95,7 +92,7 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
                     _buildTextField(foodNameController, "Food Name", _nameError,
                         (value) {
                       setDialogState(() {
-                        _nameError = null; // Clear on edit
+                        _nameError = null;
                       });
                     }),
                     DropdownButtonFormField<String>(
@@ -119,26 +116,26 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
                         proteinController, "Protein (g)", _proteinError,
                         (value) {
                       setDialogState(() {
-                        _proteinError = null; // Clear on edit
+                        _proteinError = null;
                       });
                     }, isNumber: true),
                     _buildTextField(
                         caloriesController, "Calories (kcal)", _caloriesError,
                         (value) {
                       setDialogState(() {
-                        _caloriesError = null; // Clear on edit
+                        _caloriesError = null;
                       });
                     }, isNumber: true),
                     _buildTextField(carbsController, "Carbs (g)", _carbsError,
                         (value) {
                       setDialogState(() {
-                        _carbsError = null; // Clear on edit
+                        _carbsError = null;
                       });
                     }, isNumber: true),
                     _buildTextField(fatsController, "Fats (g)", _fatsError,
                         (value) {
                       setDialogState(() {
-                        _fatsError = null; // Clear on edit
+                        _fatsError = null;
                       });
                     }, isNumber: true),
                     if (_imageError != null)
@@ -200,7 +197,7 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
                       });
                     }
 
-                    if (hasErrors) return; // Exit if any validation fails
+                    if (hasErrors) return;
 
                     final newEntry = WeightModel(
                       name: foodNameController.text,
@@ -260,7 +257,7 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
               style: const TextStyle(color: Colors.red),
             ),
           ),
-        const SizedBox(height: 12), // Spacing between fields
+        const SizedBox(height: 12),
       ],
     );
   }
@@ -297,7 +294,7 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -308,9 +305,9 @@ class _WeightLossScreenState extends State<WeightLossScreen> {
           style: TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.bold,
-              color: Colors.blueGrey),
+              color: Color.fromARGB(255, 223, 225, 226)),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
       ),
       body: ListView.builder(
         itemCount: _foodEntries.length,

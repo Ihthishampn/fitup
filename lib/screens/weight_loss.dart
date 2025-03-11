@@ -5,8 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ui/core/muscle_funtion.dart';
 import 'package:ui/modules/musle_model.dart';
 
-
-
 class MuscleGainScreen extends StatefulWidget {
   const MuscleGainScreen({super.key});
 
@@ -17,7 +15,6 @@ class MuscleGainScreen extends StatefulWidget {
 class _MuscleGainScreenState extends State<MuscleGainScreen> {
   final ImagePicker _imagePicker = ImagePicker();
 
-  // Error variables
   String? _nameError;
   String? _proteinError;
   String? _caloriesError;
@@ -25,7 +22,6 @@ class _MuscleGainScreenState extends State<MuscleGainScreen> {
   String? _fatsError;
   String? _imageError;
 
-  // Track image selection and other inputs
   void _showAddFoodDialog(BuildContext context,
       {MuscleModel? entry, int? index}) {
     final nameController = TextEditingController(text: entry?.name ?? '');
@@ -51,7 +47,7 @@ class _MuscleGainScreenState extends State<MuscleGainScreen> {
               if (pickedFile != null) {
                 setDialogState(() {
                   selectedImagePath = pickedFile.path;
-                  _imageError = null; // Clear previous image error
+                  _imageError = null;
                 });
               }
             }
@@ -81,32 +77,32 @@ class _MuscleGainScreenState extends State<MuscleGainScreen> {
                         "Food Name",
                         _nameError,
                         (value) => setDialogState(() {
-                              _nameError = null; // Clear on edit
+                              _nameError = null;
                             })),
                     _buildTextField(
                         proteinController, "Protein (g)", _proteinError,
                         (value) {
                       setDialogState(() {
-                        _proteinError = null; // Clear on edit
+                        _proteinError = null;
                       });
                     }, isNumber: true),
                     _buildTextField(
                         caloriesController, "Calories (kcal)", _caloriesError,
                         (value) {
                       setDialogState(() {
-                        _caloriesError = null; // Clear on edit
+                        _caloriesError = null;
                       });
                     }, isNumber: true),
                     _buildTextField(carbsController, "Carbs (g)", _carbsError,
                         (value) {
                       setDialogState(() {
-                        _carbsError = null; // Clear on edit
+                        _carbsError = null;
                       });
                     }, isNumber: true),
                     _buildTextField(fatsController, "Fats (g)", _fatsError,
                         (value) {
                       setDialogState(() {
-                        _fatsError = null; // Clear on edit
+                        _fatsError = null;
                       });
                     }, isNumber: true),
                     DropdownButtonFormField<String>(
@@ -179,7 +175,7 @@ class _MuscleGainScreenState extends State<MuscleGainScreen> {
                       });
                     }
 
-                    if (hasErrors) return; // Exit if any validation fails
+                    if (hasErrors) return;
 
                     final newEntry = MuscleModel(
                       name: nameController.text,
@@ -239,7 +235,7 @@ class _MuscleGainScreenState extends State<MuscleGainScreen> {
               style: const TextStyle(color: Colors.red),
             ),
           ),
-        const SizedBox(height: 12), // Spacing between fields
+        const SizedBox(height: 12),
       ],
     );
   }
@@ -291,11 +287,14 @@ class _MuscleGainScreenState extends State<MuscleGainScreen> {
 
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.blueAccent,
           title: const Text(
-        'WEIGHT LOSS PLAN',
-        style: TextStyle(
-            color: Colors.blueGrey, fontSize: 19, fontWeight: FontWeight.bold),
-      )),
+            'WEIGHT LOSS PLAN',
+            style: TextStyle(
+                color: Color.fromARGB(255, 241, 242, 243),
+                fontSize: 19,
+                fontWeight: FontWeight.bold),
+          )),
       body: ListView.builder(
         itemCount: foodEntries.length,
         itemBuilder: (context, index) {

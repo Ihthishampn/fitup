@@ -38,13 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Getting screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Calculating font size based on screen size
-    final titleFontSize = screenWidth * 0.08; // e.g., 8% of screen width
-    final bottomPadding = screenHeight * 0.1; // e.g., 10% of screen height
+    final titleFontSize = screenWidth * 0.08; 
+    final bottomPadding = screenHeight * 0.1; 
 
     return Scaffold(
       body: Stack(
@@ -56,12 +54,12 @@ class _SplashScreenState extends State<SplashScreen> {
             height: double.infinity,
           ),
           Positioned(
-            left: screenWidth * 0.35, // Centering based on screen width
-            bottom: bottomPadding, // Positioned based on screen height
+            left: screenWidth * 0.35,
+            bottom: bottomPadding, 
             child: Text(
               'FITUP',
               style: TextStyle(
-                fontSize: titleFontSize, // Responsive font size
+                fontSize: titleFontSize, 
                 color: const Color.fromARGB(255, 121, 111, 111),
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Georgia',

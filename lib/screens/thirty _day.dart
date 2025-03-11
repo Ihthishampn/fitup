@@ -18,8 +18,8 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
   bool _minTimeReached = false;
   bool _maxTimeReached = false;
 
-  int _currentDayIndex = 0; // Tracks the current chunk of 4 days
-  static const int _daysToShow = 4; // Number of days to show at a time
+  int _currentDayIndex = 0;
+  static const int _daysToShow = 4;
 
   @override
   void initState() {
@@ -31,8 +31,8 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
     await RunFunction.initHive();
     await _loadRunRecords();
     await _loadCompletedDays();
-    _setCurrentDayIndexBasedOnLastCompletedDay(); // Set index based on last completed day
-    _checkAndShowReminder(); // Check if the current day is incomplete
+    _setCurrentDayIndexBasedOnLastCompletedDay();
+    _checkAndShowReminder();
   }
 
   void _checkAndShowReminder() {
@@ -94,17 +94,15 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
     _timer?.cancel();
 
     if (_stopwatch.elapsedMilliseconds >= 600000) {
-      // 10 minutes
       _maxTimeReached = true;
       await _saveRunRecord(_stopwatch.elapsedMilliseconds);
       await _checkDailyCompletion();
     } else if (_stopwatch.elapsedMilliseconds >= 300000) {
-      // 5 minutes
       _minTimeReached = true;
       await _saveRunRecord(_stopwatch.elapsedMilliseconds);
     }
 
-    setState(() {}); // Ensure UI updates
+    setState(() {});
   }
 
   void _resetStopwatch() {
@@ -163,23 +161,23 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
       debugPrint('Cannot complete beyond 30 days');
     }
 
-    setState(() {}); // Update UI
+    setState(() {});
   }
 
   Future<void> _restartChallenge() async {
-    await RunFunction.clearCompletedDays(); // Clear completed days
-    await RunFunction.clearRunRecords(); // Clear run records
+    await RunFunction.clearCompletedDays();
+    await RunFunction.clearRunRecords();
     setState(() {
-      _completedDaysCount.clear(); // Reset completed days map
-      _runRecords.clear(); // Reset run records list
-      _currentDayIndex = 0; // Reset to the first chunk
+      _completedDaysCount.clear();
+      _runRecords.clear();
+      _currentDayIndex = 0;
     });
   }
 
   void _nextChunk() {
     if (_currentDayIndex + _daysToShow < 30) {
       setState(() {
-        _currentDayIndex += _daysToShow; // Move to next set of days
+        _currentDayIndex += _daysToShow;
       });
     }
   }
@@ -187,7 +185,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
   void _previousChunk() {
     if (_currentDayIndex - _daysToShow >= 0) {
       setState(() {
-        _currentDayIndex -= _daysToShow; // Move to previous set of days
+        _currentDayIndex -= _daysToShow;
       });
     }
   }
@@ -197,14 +195,16 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
     bool isChallengeComplete = _completedDaysCount.length == 30;
 
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Light background
+      // backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
         elevation: 0,
         title: const Text(
           'RUN A WHILE',
           style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 19),
+              color: Color.fromARGB(255, 247, 245, 245),
+              fontWeight: FontWeight.bold,
+              fontSize: 19),
         ),
         leading: IconButton(
           iconSize: 21,
@@ -242,7 +242,6 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
             ),
             const SizedBox(height: 30),
 
-            // Time Constraints Card
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
@@ -302,7 +301,6 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
             ),
             const SizedBox(height: 20),
 
-            // Stopwatch Display
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -318,7 +316,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
                   text: TextSpan(
                     text: _formatTime(_stopwatch.elapsedMilliseconds)
                         .substring(0, 5),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -327,7 +325,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
                       TextSpan(
                         text: _formatTime(_stopwatch.elapsedMilliseconds)
                             .substring(5),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -341,7 +339,6 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
 
             const SizedBox(height: 20),
 
-            // Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -400,7 +397,6 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
             ),
             const SizedBox(height: 30),
 
-            // 30-Day Challenge Section
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
@@ -426,7 +422,7 @@ class _WorkoutSchedulePageState extends State<WorkoutSchedulePage> {
                         itemCount: _daysToShow,
                         itemBuilder: (context, index) {
                           int day = _currentDayIndex + index + 1;
-                          if (day > 30) return Container(); // Avoid overflow
+                          if (day > 30) return Container();
                           int count = _completedDaysCount[day] ?? 0;
 
                           return ListTile(

@@ -161,16 +161,16 @@ class _FitnessActivitySelectorScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'FITNESS ACTIVITY',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 19,
-              color: Colors.blueGrey),
+              color: Color.fromARGB(255, 236, 237, 238)),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
         elevation: 0,
       ),
       body: Padding(
