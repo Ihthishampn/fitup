@@ -17,11 +17,11 @@ class WorkoutsScreen extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 19,
-            color: Colors.black,
+            color: Color.fromARGB(255, 238, 236, 236),
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueAccent,
         elevation: 0,
       ),
       body: Container(

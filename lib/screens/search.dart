@@ -130,7 +130,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              // Horizontally scrollable filter 
+              // Horizontally scrollable filter
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(

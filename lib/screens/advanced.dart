@@ -484,6 +484,7 @@ class _AdvancedWorkoutPageState extends State<AdvancedWorkoutPage> {
                                       style:
                                           const TextStyle(color: Colors.black),
                                     ),
+                                  
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: workout.completed
                                             ? Colors.green
