@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ui/custom_widgets/cutom.dart';
 import 'diet.dart';
 import 'profile.dart';
 import 'thirty _day.dart';

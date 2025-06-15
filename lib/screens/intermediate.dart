@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ui/core/intermediate_function.dart';
-import 'package:ui/modules/intermediate_model.dart';
+import 'package:ui/core/advance_funtion.dart';
+import 'package:ui/modules/advanced_model.dart';
+import 'package:ui/custom_widgets/validator.dart';
 
 class IntermediateWorkoutPage extends StatefulWidget {
   const IntermediateWorkoutPage({super.key});
@@ -24,17 +25,14 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
 
   int _selectedCount = 1;
 
-  final IntermediateWorkoutFunction _workoutFunctions =
-      IntermediateWorkoutFunction();
-  List<IntermediateWorkout> workouts = [];
+  final AdvanceWorkoutFunction _workoutFunctions = AdvanceWorkoutFunction();
+  List<AdvanceWorkout> workouts = [];
 
   String? _nameError;
   String? _goalError;
   String? _imageError;
 
-  // ignore: unused_field
   bool _nameFieldTouched = false;
-  // ignore: unused_field
   bool _goalFieldTouched = false;
   bool _imageFieldTouched = false;
 
@@ -135,16 +133,12 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                         ),
                       ),
                     const SizedBox(height: 15),
-                    _buildTextField(
-                      _nameController,
-                      "Workout Name",
-                      _nameError,
-                      onChanged: () {
-                        setState(() {
-                          _nameFieldTouched = true;
-                        });
-                      },
-                    ),
+                    _buildTextField(_nameController, "Workout Name", _nameError,
+                        onChanged: () {
+                      setState(() {
+                        _nameFieldTouched = true;
+                      });
+                    }),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,20 +234,20 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
 
                     bool hasErrors = false;
 
-                    if (_nameController.text.isEmpty) {
+                    if (Validators.validateRequired(_nameController.text) !=
+                        null) {
                       hasErrors = true;
                       setDialogState(() {
-                        _nameError = 'Workout Name cannot be empty';
+                        _nameError = 'Workout name is required';
                       });
                     }
-
-                    if (_goalController.text.isEmpty) {
+                    if (Validators.validateRequired(_goalController.text) !=
+                        null) {
                       hasErrors = true;
                       setDialogState(() {
-                        _goalError = 'Goal cannot be empty';
+                        _goalError = 'Goal is required';
                       });
                     }
-
                     if (_selectedFile == null) {
                       hasErrors = true;
                       setDialogState(() {
@@ -266,24 +260,15 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                       setDialogState(() {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text('Duration must be greater than 0')),
-                        );
-                      });
-                    }
-
-                    if (_selectedCount < 1) {
-                      hasErrors = true;
-                      setDialogState(() {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Count should be at least 1')),
+                            content: Text('Duration must be greater than 0'),
+                          ),
                         );
                       });
                     }
 
                     if (hasErrors) return;
 
-                    final workout = IntermediateWorkout(
+                    final workout = AdvanceWorkout(
                       name: _nameController.text,
                       duration:
                           "$_selectedHours:${_selectedMinutes.toString().padLeft(2, '0')}",
@@ -321,11 +306,19 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
       TextEditingController controller, String label, String? error,
       {void Function()? onChanged}) {
     bool hasError = error != null;
+    bool isTouched = (label == "Workout Name"
+        ? _nameFieldTouched
+        : label == "Goal"
+            ? _goalFieldTouched
+            : false);
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: hasError ? Colors.red : Colors.grey),
+        border: Border.all(
+          color: hasError ? Colors.red : Colors.grey,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,7 +326,9 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
           TextField(
             controller: controller,
             onChanged: (value) {
-              onChanged?.call();
+              if (onChanged != null) {
+                onChanged();
+              }
             },
             decoration: InputDecoration(
               labelText: label,
@@ -342,7 +337,7 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                   const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             ),
           ),
-          if (hasError)
+          if (hasError && isTouched)
             Padding(
               padding: const EdgeInsets.only(left: 15, top: 4),
               child: Text(
@@ -358,11 +353,14 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
   void _clearInputs() {
     _nameController.clear();
     _goalController.clear();
-    _selectedCount = 1;
     _selectedHours = 0;
     _selectedMinutes = 0;
     _selectedFile = null;
     editingIndex = null;
+
+    _nameFieldTouched = false;
+    _goalFieldTouched = false;
+    _imageFieldTouched = false;
 
     _nameError = null;
     _goalError = null;
@@ -420,7 +418,7 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
         title: const Text('INTERMEDIATE WORKOUT',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 232, 234, 235),
+                color: Color.fromARGB(255, 241, 242, 243),
                 fontSize: 19)),
         backgroundColor: Colors.blueAccent,
       ),
@@ -459,7 +457,7 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 5),
-                            Text("Duration: ${workout.duration}",
+                            Text("Time: ${workout.duration}",
                                 style: const TextStyle(fontSize: 16)),
                             Text("Goal: ${workout.goal}",
                                 style: const TextStyle(fontSize: 16)),
@@ -514,7 +512,7 @@ class _IntermediateWorkoutPageState extends State<IntermediateWorkoutPage> {
                                         _confirmDeleteWorkout(index),
                                     icon: const Icon(
                                       Icons.delete,
-                                      color: Colors.red,
+                                      color: Colors.redAccent,
                                     ),
                                     label: const Text(
                                       "Delete",
