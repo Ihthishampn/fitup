@@ -1,17 +1,24 @@
-# myapp
+# FitUp
 
-A new Flutter project.
+A Flutter fitness tracking app designed to help users manage and monitor their gym activities effectively.
+
+## Features
+
+- User login and signout functionality
+- Add, view, edit, and delete workout records
+- Store data locally using Hive database
+- Search and list workouts dynamically
+- Includes profile image support and validation
+
+## Tech Stack
+
+- Flutter
+- Dart
+- Hive (local storage)
+- (state management)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# fitup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Ihthishampn/FitUp.git
